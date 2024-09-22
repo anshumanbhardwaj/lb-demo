@@ -1,0 +1,34 @@
+version: "3.8"
+
+services:
+  lb-demo:
+    image: registry.digitalocean.com/ab-yt-demos/lb-demo:latest # Replace this with the actual image name
+    container_name: lb-demo
+    environment:
+      - DROPLET=DROPLET_2
+    expose:
+      - "3000"
+    networks:
+      - webnet
+
+  caddy:
+    image: caddy:latest
+    container_name: caddy-server
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile # Mount the Caddyfile
+      - caddy_data:/data # Persistent data for SSL certificates
+      - caddy_config:/config # Persistent config
+    networks:
+      - webnet
+    restart: unless-stopped
+
+networks:
+  webnet:
+    driver: bridge
+
+volumes:
+  caddy_data:
+  caddy_config:

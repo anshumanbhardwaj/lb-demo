@@ -1,0 +1,8 @@
+
+lb-demo.ogimage.fun {
+    reverse_proxy lb-demo:3000
+}
+
+http://lb-demo.ogimage.fun {
+    redir https://lb-demo.ogimage.fun{uri}
+}
